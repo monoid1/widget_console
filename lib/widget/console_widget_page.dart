@@ -3,15 +3,17 @@ import 'package:widget_console/widget/console_controller.dart';
 import 'package:widget_console/widget/console_widget.dart';
 
 class ConsoleWidgetPage extends StatelessWidget {
-  const ConsoleWidgetPage({super.key,this.commands=const[]});
-
+  const ConsoleWidgetPage({super.key, this.commands = const []});
 
   final List<ConsoleCommand> commands;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ConsoleWidget(controller: ConsoleWidgetController(commands: commands)),
+      body: WidgetConsole(
+        margin: EdgeInsets.all(8),
+        padding: EdgeInsets.all(8),
+          controller: WidgetConsoleController(commands: commands)),
     );
   }
 }

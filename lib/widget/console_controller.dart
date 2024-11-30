@@ -1,4 +1,3 @@
-import 'package:abstract_models/abstract/abstract_models.dart';
 import 'package:abstract_models/abstract/widget/a_controller.dart';
 import 'package:abstract_models/abstract/widget/a_page_widget.dart';
 import 'package:flutter/foundation.dart';
@@ -6,18 +5,18 @@ import 'package:flutter/services.dart';
 
 import 'console_widget.dart';
 
-class ConsoleWidgetController extends AController<ConsoleWidgetController> {
-  ConsoleWidgetController({required this.commands});
+class WidgetConsoleController extends AController<WidgetConsoleController> {
+  WidgetConsoleController({required this.commands});
 
   final List<ConsoleCommand> commands;
 
   final RxList<Widget> suggestions = RxList();
 
-   ///keyboard listener focus node
-  final FocusNode focusNodeKeyboard=FocusNode();
+  ///keyboard listener focus node
+  final FocusNode focusPortal = FocusNode();
 
   ///overlay portal with suggestions
-  final OverlayPortalController portal=OverlayPortalController();
+  final OverlayPortalController portal = OverlayPortalController();
 
   final RxList<Widget> widgets = RxList();
 
@@ -32,10 +31,9 @@ class ConsoleWidgetController extends AController<ConsoleWidgetController> {
     textEditingController.text += character;
   }
 
-
-
   ///current key timestamp
   Duration timeStamp = Duration();
+
   ///listen to input field key events
   @override
   void onInit() {
@@ -55,41 +53,34 @@ class ConsoleWidgetController extends AController<ConsoleWidgetController> {
         if (k.physicalKey.usbHidUsage == 0x00070051) {}
 
         ///Tab
-        if (k is KeyDownEvent && k.logicalKey==LogicalKeyboardKey.tab) {
-          var keyword=textEditingController.text;
-          var c = commands.firstWhereOrNull((k)=>k.name.contains(RegExp(keyword)));
-          if(c!=null){
+        if (k is KeyDownEvent && k.logicalKey == LogicalKeyboardKey.tab) {
+          var keyword = textEditingController.text;
+          var c = commands
+              .firstWhereOrNull((k) => k.name.contains(RegExp(keyword)));
+          if (c != null) {
             print(c.name);
             textEditingController.text = c.name;
-            WidgetsBinding.instance.addPostFrameCallback((d){
-
-            });
-
+            WidgetsBinding.instance.addPostFrameCallback((d) {});
           }
-
         }
+
         ///Enter
-        if (k is KeyDownEvent && k.logicalKey==LogicalKeyboardKey.enter) {
+        if (k is KeyDownEvent && k.logicalKey == LogicalKeyboardKey.enter) {
           focusNode.unfocus();
           focusNode.requestFocus();
-          var keyword=textEditingController.text;
-          var c = commands.firstWhereOrNull((k)=>k.name==keyword);
-          if(c!=null){
-            widgets.add(c.widget);
-            if(c.call!=null){
+          var keyword = textEditingController.text;
+          var c = commands.firstWhereOrNull((k) => k.name == keyword);
+          if (c != null) {
+            addWidget(c.widget);
+            if (c.call != null) {
               c.call!();
             }
           }
-          textEditingController.text='';
-
+          textEditingController.text = '';
         }
-
-
 
         ///Backspace
         if (k.physicalKey.usbHidUsage == 0x0007002a && k is KeyDownEvent) {
-
-
           //print(timeStamp);
           var s = textEditingController.text;
           if (s.isNotEmpty) {
@@ -106,18 +97,31 @@ class ConsoleWidgetController extends AController<ConsoleWidgetController> {
       onChanged(textEditingController.text);
     });
 
-    focusNode.addListener(() {});
+    focusNode.addListener(() {
+      if (!focusNode.hasFocus) {
+        //portal.hide();
+      }
+      if (focusNode.hasFocus && suggestions.isNotEmpty) {
+        portal.show();
+      }
+    });
     super.onInit();
+  }
+
+  ///add widget to console view
+  addWidget(Widget widget){
+    widgets.add(Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        widget
+      ],
+    ));
   }
 
 
 
-
-
-
-
-
-
+  _onEnterKey() {}
 
   onSubmitted(String text) {
     textEditingController.text = '';
@@ -145,23 +149,41 @@ class ConsoleWidgetController extends AController<ConsoleWidgetController> {
     for (var i in commands) {
       if (i.name.contains(RegExp(text))) {
         //print(text);
-        suggestions.add(ListTile(style: ListTileStyle.drawer,dense: true,
-          title: Text(i.name),
+        suggestions.add(Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ListTile(
+                onTap: () {
+                  print('tap');
+                  setInput(i.name);
+                },
+                style: ListTileStyle.drawer,
+                dense: true,
+                title: Text(i.name),
+              ),
+            ),
+          ],
+
         ));
       }
     }
     this.suggestions.addAll(suggestions);
-    if(suggestions.isNotEmpty){
-
+    if (suggestions.isNotEmpty) {
       portal.show();
     }
-
   }
+
+
+
+
+
 
   suggestionOnTap() {}
 
-
-
-
-
+  setInput(String text) {
+    portal.hide();
+    focusNode.requestFocus();
+    textEditingController.text=text;
+  }
 }
