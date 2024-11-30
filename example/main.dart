@@ -2,10 +2,7 @@ import 'package:abstract_models/abstract/app/model/app_model.dart';
 import 'package:abstract_models/feature/app/app_service.dart';
 import 'package:abstract_models/abstract_models.dart';
 import 'package:widget_console/model/default_models.dart';
-import 'package:widget_console/widget/console_controller.dart';
-import 'package:widget_console/widget/console_widget.dart';
 import 'package:widget_console/widget/console_widget_page.dart';
-import 'package:widget_console/widget/flutter_console_widget/flutter_console_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
