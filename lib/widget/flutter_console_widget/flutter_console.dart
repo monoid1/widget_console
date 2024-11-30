@@ -50,7 +50,7 @@ class FlutterConsole extends StatelessWidget {
                                 scrollbarTheme:
                                     const ScrollbarThemeData().copyWith(
                               thumbColor:
-                                  MaterialStateProperty.all(scrollColor),
+                                  WidgetStateProperty.all(scrollColor),
                             )),
                             child: Scrollbar(
                               controller: controller.scrollController,

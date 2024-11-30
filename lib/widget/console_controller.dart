@@ -16,6 +16,9 @@ class ConsoleWidgetController extends AController<ConsoleWidgetController> {
    ///keyboard listener focus node
   final FocusNode focusNodeKeyboard=FocusNode();
 
+  ///overlay portal with suggestions
+  final OverlayPortalController portal=OverlayPortalController();
+
   final RxList<Widget> widgets = RxList();
 
   final TextEditingController textEditingController = TextEditingController();
@@ -67,14 +70,18 @@ class ConsoleWidgetController extends AController<ConsoleWidgetController> {
         }
         ///Enter
         if (k is KeyDownEvent && k.logicalKey==LogicalKeyboardKey.enter) {
+          focusNode.unfocus();
+          focusNode.requestFocus();
           var keyword=textEditingController.text;
           var c = commands.firstWhereOrNull((k)=>k.name==keyword);
           if(c!=null){
             widgets.add(c.widget);
+            if(c.call!=null){
+              c.call!();
+            }
           }
           textEditingController.text='';
-          focusNode.unfocus();
-          focusNode.requestFocus();
+
         }
 
 
@@ -103,6 +110,15 @@ class ConsoleWidgetController extends AController<ConsoleWidgetController> {
     super.onInit();
   }
 
+
+
+
+
+
+
+
+
+
   onSubmitted(String text) {
     textEditingController.text = '';
     focusNode.requestFocus();
@@ -120,6 +136,7 @@ class ConsoleWidgetController extends AController<ConsoleWidgetController> {
   }
 
   onChanged(String text) {
+    portal.hide();
     this.suggestions.clear();
     List<Widget> suggestions = [];
     if (text.isEmpty) {
@@ -134,7 +151,17 @@ class ConsoleWidgetController extends AController<ConsoleWidgetController> {
       }
     }
     this.suggestions.addAll(suggestions);
+    if(suggestions.isNotEmpty){
+
+      portal.show();
+    }
+
   }
 
   suggestionOnTap() {}
+
+
+
+
+
 }
