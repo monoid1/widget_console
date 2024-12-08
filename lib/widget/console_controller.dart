@@ -1,5 +1,6 @@
 import 'package:abstract_models/abstract/widget/a_controller.dart';
 import 'package:abstract_models/abstract/widget/a_page_widget.dart';
+import 'package:abstract_models/abstract/widget/a_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 

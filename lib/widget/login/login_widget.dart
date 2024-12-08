@@ -1,8 +1,5 @@
-import 'package:abstract_models/abstract/backend/command.dart';
 import 'package:abstract_models/abstract/widget/a_page_widget.dart';
-import 'package:abstract_models/feature/user/model/user_model.dart';
-import 'package:abstract_models/feature/user/widgets/password_input_widget.dart';
-import 'package:abstract_models/widget/email_input_widet.dart';
+import 'package:abstract_models/abstract/widget/a_widget.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
@@ -11,13 +8,13 @@ class LoginPage extends APageWidget {
 
   //final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final UserModel userModel = UserModel(
-      userName: '',
-      password: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      id: '');
+  // final UserModel userModel = UserModel(
+  //     userName: '',
+  //     password: '',
+  //     firstName: '',
+  //     lastName: '',
+  //     email: '',
+  //     id: '');
 
   final RxString loginMessage = ''.obs;
 
@@ -38,43 +35,43 @@ class LoginPage extends APageWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      EmailInputWidget(
-                        onSaved: (s) => userModel.email = s ?? '',
-                      ),
-                      PasswordInputWidget(
-                        onSaved: (s) => userModel.password = s ?? '',
-                      ),
+                      // EmailInputWidget(
+                      //   onSaved: (s) => userModel.email = s ?? '',
+                      // ),
+                      // PasswordInputWidget(
+                      //   onSaved: (s) => userModel.password = s ?? '',
+                      // ),
                       SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          //bool? a = _formKey.currentState?.validate();
-                          //print(a);
-                          //if (a == null || a == false) return;
-                          //_formKey.currentState?.save();
-                          print(userModel.email);
-                          print(userModel.password);
-
-                          // loginMessage.value =
-                          //     await LoginUserCommand(userModel).call();
-                          LoginCommand(userModel).call();
-                        },
-                        child: Text(
-                          'Login',
-                          style: TextStyle(),
-                        ),
-                      ),
+                      // ElevatedButton(
+                      //   onPressed: () async {
+                      //     //bool? a = _formKey.currentState?.validate();
+                      //     //print(a);
+                      //     //if (a == null || a == false) return;
+                      //     //_formKey.currentState?.save();
+                      //     print(userModel.email);
+                      //     print(userModel.password);
+                      //
+                      //     // loginMessage.value =
+                      //     //     await LoginUserCommand(userModel).call();
+                      //     LoginCommand(userModel).call();
+                      //   },
+                      //   child: Text(
+                      //     'Login',
+                      //     style: TextStyle(),
+                      //   ),
+                      // ),
                       Divider(),
-                      ElevatedButton(
-                        onPressed: () async {
-                          SignOutCommand(userModel).call();
-                        },
-                        child: Text(
-                          'SignOut',
-                          style: TextStyle(),
-                        ),
-                      ),
+                      // ElevatedButton(
+                      //   onPressed: () async {
+                      //     SignOutCommand(userModel).call();
+                      //   },
+                      //   child: Text(
+                      //     'SignOut',
+                      //     style: TextStyle(),
+                      //   ),
+                      // ),
                       if (loginMessage.value.isNotEmpty)
                         Text(
                           loginMessage.value,

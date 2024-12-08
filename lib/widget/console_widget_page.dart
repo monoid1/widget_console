@@ -1,4 +1,5 @@
 import 'package:abstract_models/abstract/widget/a_page_widget.dart';
+import 'package:abstract_models/abstract/widget/a_widget.dart';
 import 'package:widget_console/widget/console_controller.dart';
 import 'package:widget_console/widget/console_widget.dart';
 
